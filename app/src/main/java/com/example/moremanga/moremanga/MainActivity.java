@@ -77,7 +77,8 @@ public class MainActivity extends AppCompatActivity {
 
         for (int i = 0 ; i < ListOfManga.size(); i++) {
             count++;
-            CreateMangaItem(row, ListOfManga.get(i));
+            MangaItem item = ListOfManga.get(i);
+            item.CreateMangaItem(getApplicationContext(), row);
 
             if ((i + 1) % IN_ONE_ROW == 0 && i != 0) {
                 count = 0;
@@ -97,39 +98,5 @@ public class MainActivity extends AppCompatActivity {
         row.setOrientation(LinearLayout.HORIZONTAL);
 
         return row;
-    }
-
-    private void CreateMangaItem(LinearLayout row, MangaItem item) throws IOException {
-        LinearLayout mangaHolder = new LinearLayout(getApplicationContext());
-        mangaHolder.setOrientation(LinearLayout.VERTICAL);
-        LayoutParams params = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 430, 1.0f);
-        mangaHolder.setLayoutParams(params);
-        mangaHolder.setPadding(15, 15,15,15);
-
-        LinearLayout mangaInnerHolder = new LinearLayout(getApplicationContext());
-        mangaInnerHolder.setOrientation(LinearLayout.VERTICAL);
-        LayoutParams innerparams = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, 1.0f);
-        mangaInnerHolder.setLayoutParams(innerparams);
-
-        TextView nameHolder = new TextView(getApplicationContext());
-        nameHolder.setText(item.Name);
-        nameHolder.setGravity(Gravity.CENTER_HORIZONTAL);
-        RelativeLayout.LayoutParams p = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 50);
-        p.leftMargin = 10; // in PX
-        nameHolder.setLayoutParams(p);
-
-        ImageView imageView = new ImageView(getApplicationContext());
-        if (item.PosterImgUrl != null) {
-            Picasso.with(getApplicationContext()).load(item.PosterImgUrl).into(imageView);
-        }
-
-        RelativeLayout.LayoutParams imageParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,350);
-        imageView.setLayoutParams(imageParams);
-        mangaInnerHolder.addView(imageView);
-
-        mangaHolder.addView(mangaInnerHolder);
-        mangaInnerHolder.addView(nameHolder);
-
-        row.addView(mangaHolder);
     }
 }
