@@ -31,9 +31,9 @@ public class MainActivity extends AppCompatActivity {
     public MainActivity(){
         ListOfManga = new ArrayList<MangaItem>();
 
-        ListOfManga.add(new MangaItem("One Punch Man", "https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Logo_diario_AS.svg/1200px-Logo_diario_AS.svg.png"));
+        ListOfManga.add(new MangaItem("One Punch Man", "http://static.readmanga.me/uploads/pics/00/99/917_o.jpg"));
         ListOfManga.add(new MangaItem("Naruto", "https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Logo_diario_AS.svg/1200px-Logo_diario_AS.svg.png" ));
-        ListOfManga.add(new MangaItem("Berserk", "https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Logo_diario_AS.svg/1200px-Logo_diario_AS.svg.png"));
+        ListOfManga.add(new MangaItem("Berserk", "https://www.heart.org/-/media/images/health-topics/congenital-heart-defects/50_1683_44a_asd.jpg?h=551&w=572&la=en&hash=60A4E57B316F13921A743143171BD2EFC7912F93"));
         ListOfManga.add(new MangaItem("Ganz"));
         ListOfManga.add(new MangaItem("Ya tvoi rot shatal"));
         ListOfManga.add(new MangaItem("Omaewa mo shindeiru"));
@@ -101,32 +101,35 @@ public class MainActivity extends AppCompatActivity {
 
     private void CreateMangaItem(LinearLayout row, MangaItem item) throws IOException {
         LinearLayout mangaHolder = new LinearLayout(getApplicationContext());
+        mangaHolder.setOrientation(LinearLayout.VERTICAL);
+        LayoutParams params = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 430, 1.0f);
+        mangaHolder.setLayoutParams(params);
+        mangaHolder.setPadding(15, 15,15,15);
+
         LinearLayout mangaInnerHolder = new LinearLayout(getApplicationContext());
         mangaInnerHolder.setOrientation(LinearLayout.VERTICAL);
-
-        LayoutParams params = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 400, 1.0f);
-        mangaHolder.setLayoutParams(params);
+        LayoutParams innerparams = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, 1.0f);
+        mangaInnerHolder.setLayoutParams(innerparams);
 
         TextView nameHolder = new TextView(getApplicationContext());
         nameHolder.setText(item.Name);
         nameHolder.setGravity(Gravity.CENTER_HORIZONTAL);
-
-        RelativeLayout.LayoutParams p = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        RelativeLayout.LayoutParams p = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 50);
         p.leftMargin = 10; // in PX
-        p.topMargin = 350; // in PX
         nameHolder.setLayoutParams(p);
-        nameHolder.setBackgroundColor(Color.TRANSPARENT);
+
+        ImageView imageView = new ImageView(getApplicationContext());
+        if (item.PosterImgUrl != null) {
+            Picasso.with(getApplicationContext()).load(item.PosterImgUrl).into(imageView);
+        }
+
+        RelativeLayout.LayoutParams imageParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,350);
+        imageView.setLayoutParams(imageParams);
+        mangaInnerHolder.addView(imageView);
+
+        mangaHolder.addView(mangaInnerHolder);
         mangaInnerHolder.addView(nameHolder);
 
-        if (item.PosterImgUrl != null) {
-            ImageView imageView = new ImageView(getApplicationContext());
-            Picasso.with(getApplicationContext()).load(item.PosterImgUrl).into(imageView);
-
-            RelativeLayout.LayoutParams imageParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-            imageView.setLayoutParams(imageParams);
-            mangaInnerHolder.addView(imageView);
-        }
-        mangaHolder.addView(mangaInnerHolder);
         row.addView(mangaHolder);
     }
 }
