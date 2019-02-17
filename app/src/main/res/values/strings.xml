@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">MoreManga</string>
     <string name="action_settings">Settings</string>
+    <string name="MainTab">Главная</string>
+    <string name="SearchTab">Поиск</string>
+    <string name="right">Right</string>
 </resources>
