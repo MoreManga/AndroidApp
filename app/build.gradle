@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 
 android {
+    dataBinding.enabled = true
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.example.moremanga.moremanga"
@@ -19,7 +20,9 @@ android {
 }
 
 dependencies {
-    compile 'com.squareup.picasso:picasso:2.5.2'
+    implementation 'android.arch.lifecycle:extensions:1.1.0'
+    implementation 'com.android.support:recyclerview-v7:28.0.0'
+    implementation 'com.squareup.picasso:picasso:2.5.2'
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'com.android.support:appcompat-v7:28.0.0'
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'

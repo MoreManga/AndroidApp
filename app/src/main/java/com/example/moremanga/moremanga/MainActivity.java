@@ -1,32 +1,31 @@
 package com.example.moremanga.moremanga;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
+import android.databinding.BindingAdapter;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Gravity;
-import android.view.View;
-import android.view.ViewGroup;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.LinearLayout.LayoutParams;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
-import com.example.moremanga.moremanga.Models.MangaItem;
+import com.example.moremanga.moremanga.adapters.MangaItemAdapter;
+import com.example.moremanga.moremanga.models.MangaItem;
+import com.example.moremanga.moremanga.databinding.MainActivityBinding;
 import com.squareup.picasso.Picasso;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     public List<MangaItem> ListOfManga;
     private int IN_ONE_ROW = 3;
+
+    private MainActivityBinding binding;
+    @BindingAdapter("imageUrl")
+    public static void loadImage(ImageView view, String imageUrl) {
+        Picasso.with(view.getContext())
+                .load(imageUrl)
+                .into(view);
+    }
 
     public MainActivity(){
         ListOfManga = new ArrayList<MangaItem>();
@@ -55,48 +54,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        try {
-            LoadManga();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        RecyclerView rc = findViewById(R.id.recycler_view);
+        MangaItemAdapter t = new MangaItemAdapter();
+        t.setData(ListOfManga);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
-    }
-
-    public void LoadManga() throws IOException {
-        LinearLayout layout = (LinearLayout) findViewById(R.id.MainList);
-        LinearLayout row = GetRow();
-        int count = 0;
-
-        for (int i = 0 ; i < ListOfManga.size(); i++) {
-            count++;
-            MangaItem item = ListOfManga.get(i);
-            item.CreateMangaItem(getApplicationContext(), row);
-
-            if ((i + 1) % IN_ONE_ROW == 0 && i != 0) {
-                count = 0;
-                layout.addView(row);
-
-                row = GetRow();
-            }
-        }
-
-        if (count > 0) {
-            layout.addView(row);
-        }
-    }
-
-    private  LinearLayout GetRow() {
-        LinearLayout row = new LinearLayout(getApplicationContext());
-        row.setOrientation(LinearLayout.HORIZONTAL);
-
-        return row;
+        rc.setLayoutManager(new GridLayoutManager(this, IN_ONE_ROW));
+        rc.setAdapter(t);
+        rc.setHasFixedSize(true);
     }
 }
