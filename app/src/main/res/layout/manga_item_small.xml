@@ -24,21 +24,21 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="220dp"
+                android:layout_height="200dp"
                 android:padding="10dp">
 
                 <ImageView
                     android:id="@+id/mangaPoster"
                     android:layout_width="match_parent"
-                    android:layout_height="150dp"
-                    android:background="@android:color/white"
+                    android:layout_height="140dp"
+                    android:background="@android:color/black"
                     android:gravity="top"
                     android:scaleType="centerInside"
                     app:imageUrl="@{mangaitem.PosterImgUrl}" />
 
                 <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
+                    android:layout_height="30dp"
                     android:layout_below="@+id/mangaPoster"
                     android:layout_alignParentBottom="true"
                     android:layout_marginTop="5dp"

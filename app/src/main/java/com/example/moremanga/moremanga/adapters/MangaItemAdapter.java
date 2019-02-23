@@ -13,8 +13,22 @@ import com.example.moremanga.moremanga.databinding.MangaItemSmallBinding;
 import java.util.LinkedList;
 import java.util.List;
 
-public class MangaItemAdapter extends RecyclerView.Adapter<MangaItemHolder> {
+class MangaItemHolder extends RecyclerView.ViewHolder {
+    MangaItemSmallBinding binding;
 
+    public MangaItemHolder(MangaItemSmallBinding binding) {
+        super(binding.getRoot());
+        this.binding = binding;
+    }
+
+    public void bind(MangaItem mangaItem) {
+        binding.setMangaitem(mangaItem);
+        binding.executePendingBindings();
+    }
+}
+
+
+public class MangaItemAdapter extends RecyclerView.Adapter<MangaItemHolder> {
     private List<MangaItem> items = new LinkedList<>();
 
     public void setData(List<MangaItem> data) {

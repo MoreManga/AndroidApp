@@ -2,24 +2,36 @@ package com.example.moremanga.moremanga;
 
 import android.databinding.BindingAdapter;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.widget.ImageView;
 
 import com.example.moremanga.moremanga.adapters.MangaItemAdapter;
-import com.example.moremanga.moremanga.models.MangaItem;
 import com.example.moremanga.moremanga.databinding.MainActivityBinding;
+import com.example.moremanga.moremanga.models.MangaItem;
+import com.example.moremanga.moremanga.services.IMoreMangaNetworkService;
+import com.example.moremanga.moremanga.services.MoreMangaDummyNetworkService;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-    public List<MangaItem> ListOfManga;
+    private DrawerLayout drawerLayout;
     private int IN_ONE_ROW = 3;
 
     private MainActivityBinding binding;
+    private IMoreMangaNetworkService moreMangaNetworkService;
+
+    private List<MangaItem> loadedManga;
+
     @BindingAdapter("imageUrl")
     public static void loadImage(ImageView view, String imageUrl) {
         Picasso.with(view.getContext())
@@ -28,25 +40,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public MainActivity(){
-        ListOfManga = new ArrayList<MangaItem>();
-
-        ListOfManga.add(new MangaItem("One Punch Man", "http://static.readmanga.me/uploads/pics/00/99/917_o.jpg"));
-        ListOfManga.add(new MangaItem("Naruto", "https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Logo_diario_AS.svg/1200px-Logo_diario_AS.svg.png" ));
-        ListOfManga.add(new MangaItem("Berserk", "https://www.heart.org/-/media/images/health-topics/congenital-heart-defects/50_1683_44a_asd.jpg?h=551&w=572&la=en&hash=60A4E57B316F13921A743143171BD2EFC7912F93"));
-        ListOfManga.add(new MangaItem("Ganz"));
-        ListOfManga.add(new MangaItem("Ya tvoi rot shatal"));
-        ListOfManga.add(new MangaItem("Omaewa mo shindeiru"));
-        ListOfManga.add(new MangaItem("Nani?"));
-        ListOfManga.add(new MangaItem("Fate"));
-        ListOfManga.add(new MangaItem("Greate teatcher Onidzuka"));
-        ListOfManga.add(new MangaItem("Porn Hub"));
-        ListOfManga.add(new MangaItem("Boku no piko"));
-        ListOfManga.add(new MangaItem("Boku no hir academy"));
-        ListOfManga.add(new MangaItem("Victim Girls"));
-
-        for (int i = 0 ; i < 200; i++) {
-            ListOfManga.add(new MangaItem("name " + i));
-        }
+        moreMangaNetworkService = new MoreMangaDummyNetworkService();
+        loadedManga = new ArrayList<>();
     }
 
     @Override
@@ -54,12 +49,50 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        RecyclerView rc = findViewById(R.id.recycler_view);
-        MangaItemAdapter t = new MangaItemAdapter();
-        t.setData(ListOfManga);
+        Toolbar toolbar1 = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar1);
 
-        rc.setLayoutManager(new GridLayoutManager(this, IN_ONE_ROW));
-        rc.setAdapter(t);
-        rc.setHasFixedSize(true);
+        ActionBar actionbar = getSupportActionBar();
+        actionbar.setDisplayHomeAsUpEnabled(true);
+        actionbar.setHomeAsUpIndicator(R.mipmap.ic_launcher);
+
+        drawerLayout = findViewById(R.id.drawer_layout);
+
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(
+                new NavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(MenuItem menuItem) {
+                        // set item as selected to persist highlight
+                        menuItem.setChecked(true);
+                        // close drawer when item is tapped
+                        drawerLayout.closeDrawers();
+
+                        // Add code here to update the UI based on the item selected
+                        // For example, swap UI fragments here
+
+                        return true;
+                    }
+                });
+
+        loadedManga.addAll(moreMangaNetworkService.GetAllManga(1, 100));
+
+        RecyclerView rcView = findViewById(R.id.recycler_view);
+        MangaItemAdapter t = new MangaItemAdapter();
+        t.setData(loadedManga);
+        rcView.setLayoutManager(new GridLayoutManager(this, IN_ONE_ROW));
+        rcView.setAdapter(t);
+        rcView.setHasFixedSize(true);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                drawerLayout.openDrawer(GravityCompat.START);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
