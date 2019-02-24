@@ -24,16 +24,16 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="190dp"
                 android:padding="10dp">
 
                 <ImageView
                     android:id="@+id/mangaPoster"
                     android:layout_width="match_parent"
-                    android:layout_height="140dp"
+                    android:layout_height="130dp"
                     android:background="@android:color/black"
                     android:gravity="top"
-                    android:scaleType="centerInside"
+                    android:scaleType="centerCrop"
                     app:imageUrl="@{mangaitem.PosterImgUrl}" />
 
                 <TextView

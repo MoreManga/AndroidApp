@@ -51,10 +51,9 @@ public class MainActivity extends AppCompatActivity {
 
         Toolbar toolbar1 = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar1);
-
         ActionBar actionbar = getSupportActionBar();
         actionbar.setDisplayHomeAsUpEnabled(true);
-        actionbar.setHomeAsUpIndicator(R.mipmap.ic_launcher);
+        actionbar.setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp);
 
         drawerLayout = findViewById(R.id.drawer_layout);
 
@@ -63,13 +62,15 @@ public class MainActivity extends AppCompatActivity {
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(MenuItem menuItem) {
-                        // set item as selected to persist highlight
                         menuItem.setChecked(true);
-                        // close drawer when item is tapped
                         drawerLayout.closeDrawers();
 
-                        // Add code here to update the UI based on the item selected
-                        // For example, swap UI fragments here
+                        switch (menuItem.getItemId()) {
+                            case R.id.nav_main:
+                            setContentView(R.layout.activity_main);
+                            case R.id.nav_settings:
+                            setContentView(R.layout.activity_settings);
+                        }
 
                         return true;
                     }
@@ -83,11 +84,13 @@ public class MainActivity extends AppCompatActivity {
         rcView.setLayoutManager(new GridLayoutManager(this, IN_ONE_ROW));
         rcView.setAdapter(t);
         rcView.setHasFixedSize(true);
+
+        //MenuItem mainMenuItem = findViewById(R.id.nav_main);
+        //mainMenuItem.setChecked(true);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         switch (item.getItemId()) {
             case android.R.id.home:
                 drawerLayout.openDrawer(GravityCompat.START);
