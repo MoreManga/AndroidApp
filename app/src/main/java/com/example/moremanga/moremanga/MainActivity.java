@@ -1,53 +1,28 @@
 package com.example.moremanga.moremanga;
 
-import android.databinding.BindingAdapter;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.widget.ImageView;
 
-import com.example.moremanga.moremanga.adapters.MangaItemAdapter;
-import com.example.moremanga.moremanga.databinding.MainActivityBinding;
-import com.example.moremanga.moremanga.models.MangaItem;
-import com.example.moremanga.moremanga.services.IMoreMangaNetworkService;
-import com.example.moremanga.moremanga.services.MoreMangaDummyNetworkService;
-import com.squareup.picasso.Picasso;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.example.moremanga.moremanga.pages.MainPage;
+import com.example.moremanga.moremanga.pages.SettingsPage;
 
 public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
-    private int IN_ONE_ROW = 3;
-
-    private MainActivityBinding binding;
-    private IMoreMangaNetworkService moreMangaNetworkService;
-
-    private List<MangaItem> loadedManga;
-
-    @BindingAdapter("imageUrl")
-    public static void loadImage(ImageView view, String imageUrl) {
-        Picasso.with(view.getContext())
-                .load(imageUrl)
-                .into(view);
-    }
-
-    public MainActivity(){
-        moreMangaNetworkService = new MoreMangaDummyNetworkService();
-        loadedManga = new ArrayList<>();
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        goToLayout(new MainPage());
 
         Toolbar toolbar1 = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar1);
@@ -67,26 +42,27 @@ public class MainActivity extends AppCompatActivity {
 
                         switch (menuItem.getItemId()) {
                             case R.id.nav_main:
-                            setContentView(R.layout.activity_main);
+                                goToLayout(new MainPage());
+                                break;
                             case R.id.nav_settings:
-                            setContentView(R.layout.activity_settings);
+                                goToLayout(new SettingsPage());
+                                break;
                         }
+
 
                         return true;
                     }
                 });
 
-        loadedManga.addAll(moreMangaNetworkService.GetAllManga(1, 100));
-
-        RecyclerView rcView = findViewById(R.id.recycler_view);
-        MangaItemAdapter t = new MangaItemAdapter();
-        t.setData(loadedManga);
-        rcView.setLayoutManager(new GridLayoutManager(this, IN_ONE_ROW));
-        rcView.setAdapter(t);
-        rcView.setHasFixedSize(true);
-
         //MenuItem mainMenuItem = findViewById(R.id.nav_main);
         //mainMenuItem.setChecked(true);
+    }
+
+    private void goToLayout(Fragment fragment) {
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.replace(R.id.dynamic_fragment_frame_layout, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 
     @Override

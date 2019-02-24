@@ -35,10 +35,10 @@
 
             </android.support.v7.widget.Toolbar>
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recycler_view"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+            <FrameLayout
+                android:id="@+id/dynamic_fragment_frame_layout"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent" />
 
         </LinearLayout>
 
