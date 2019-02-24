@@ -4,6 +4,7 @@ android {
     dataBinding.enabled = true
     compileSdkVersion 28
     defaultConfig {
+        vectorDrawables.useSupportLibrary = true
         applicationId "com.example.moremanga.moremanga"
         minSdkVersion 19
         targetSdkVersion 28
