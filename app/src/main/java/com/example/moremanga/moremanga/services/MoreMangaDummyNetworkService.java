@@ -34,7 +34,7 @@ public class MoreMangaDummyNetworkService implements IMoreMangaNetworkService {
         listOfAllManga.add(new MangaItem("Tower of God", "http://static.readmanga.me/uploads/pics/00/99/917.jpg"));
 
         for (int i = 0 ; i < 100; i++) {
-            listOfAllManga.add(new MangaItem("No name manga " + i, "https://www.freeiconspng.com/uploads/no-image-icon-6.png"));
+            listOfAllManga.add(new MangaItem("No name manga " + i, "http://vollrath.com/ClientCss/images/VollrathImages/No_Image_Available.jpg"));
         }
     }
 
