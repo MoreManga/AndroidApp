@@ -10,19 +10,23 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.widget.CompoundButton;
+import android.widget.LinearLayout;
+import android.widget.Switch;
 
 import com.example.moremanga.moremanga.pages.MainPage;
 import com.example.moremanga.moremanga.pages.SettingsPage;
 
 public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
+    private boolean lastMockServerState;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        goToLayout(new MainPage());
+        goToMain(true);
 
         Toolbar toolbar1 = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar1);
@@ -33,29 +37,46 @@ public class MainActivity extends AppCompatActivity {
         drawerLayout = findViewById(R.id.drawer_layout);
 
         NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.getMenu().getItem(0).setChecked(true);
         navigationView.setNavigationItemSelectedListener(
-                new NavigationView.OnNavigationItemSelectedListener() {
-                    @Override
-                    public boolean onNavigationItemSelected(MenuItem menuItem) {
-                        menuItem.setChecked(true);
-                        drawerLayout.closeDrawers();
+            new NavigationView.OnNavigationItemSelectedListener() {
+                @Override
+                public boolean onNavigationItemSelected(MenuItem menuItem) {
+                    menuItem.setChecked(true);
+                    drawerLayout.closeDrawers();
 
-                        switch (menuItem.getItemId()) {
-                            case R.id.nav_main:
-                                goToLayout(new MainPage());
-                                break;
-                            case R.id.nav_settings:
-                                goToLayout(new SettingsPage());
-                                break;
-                        }
-
-
-                        return true;
+                    switch (menuItem.getItemId()) {
+                        case R.id.nav_main:
+                            goToMain(lastMockServerState);
+                            break;
+                        case R.id.nav_settings:
+                            goToLayout(new SettingsPage());
+                            break;
                     }
-                });
 
-        //MenuItem mainMenuItem = findViewById(R.id.nav_main);
-        //mainMenuItem.setChecked(true);
+                    return true;
+                }
+            });
+
+        Switch sw = ((Switch)((LinearLayout)navigationView.getMenu().findItem(R.id.mockServer_switch).getActionView()).getChildAt(0));
+        sw.setChecked(true);
+        sw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                goToMain(isChecked);
+            }
+        });
+    }
+
+    private void goToMain(boolean state) {
+        lastMockServerState = state;
+
+        MainPage fr = new MainPage();
+        Bundle bundl = new Bundle();
+        bundl.putBoolean("mockServerState", state);
+        fr.setArguments(bundl);
+
+        goToLayout(fr);
     }
 
     private void goToLayout(Fragment fragment) {

@@ -3,4 +3,5 @@
     <string name="app_slogan">Море манги только у нас</string>
     <string name="settings">Настройки</string>
     <string name="main">Главная</string>
+    <string name="serverMockMode">Симуляция сервера</string>
 </resources>

@@ -1,8 +1,8 @@
 package com.example.moremanga.moremanga.pages;
 
+import android.app.Fragment;
 import android.databinding.BindingAdapter;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -16,6 +16,8 @@ import com.example.moremanga.moremanga.databinding.MainActivityBinding;
 import com.example.moremanga.moremanga.models.MangaItem;
 import com.example.moremanga.moremanga.services.IMoreMangaNetworkService;
 import com.example.moremanga.moremanga.services.MoreMangaDummyNetworkService;
+import com.example.moremanga.moremanga.services.MoreMangaRealNetworkService;
+import com.example.moremanga.moremanga.services.NetworkService;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -36,15 +38,25 @@ public class MainPage extends Fragment {
                 .into(view);
     }
 
-    public  MainPage() {
-        moreMangaNetworkService = new MoreMangaDummyNetworkService();
+    public MainPage() {
         loadedManga = new ArrayList<>();
+    }
+
+    private void setMockServerState(boolean state) {
+        if (state) {
+            moreMangaNetworkService = new MoreMangaDummyNetworkService();
+        }
+        else {
+            moreMangaNetworkService = new MoreMangaRealNetworkService(new NetworkService());
+        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container,
                              Bundle savedInstanceState) {
+        setMockServerState(getArguments().getBoolean("mockServerState"));
+
         View view = inflater.inflate(R.layout.main_page, container, false);
         initialize(view);
         return view;

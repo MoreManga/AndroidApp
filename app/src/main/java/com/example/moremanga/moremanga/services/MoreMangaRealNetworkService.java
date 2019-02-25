@@ -2,6 +2,7 @@ package com.example.moremanga.moremanga.services;
 
 import com.example.moremanga.moremanga.models.MangaItem;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MoreMangaRealNetworkService implements IMoreMangaNetworkService {
@@ -12,6 +13,6 @@ public class MoreMangaRealNetworkService implements IMoreMangaNetworkService {
     }
 
     public List<MangaItem> GetAllManga(int _page, int _perPage) {
-        return null;
+        return new ArrayList<MangaItem>();
     }
 }
